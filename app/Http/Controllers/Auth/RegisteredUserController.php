@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\File;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
@@ -46,6 +47,16 @@ class RegisteredUserController extends Controller
 
         Auth::login($user);
 
-        return redirect(route('dashboard', absolute: false));
+        // I want when the user is created that time a root is created
+        // So that user upload their own files inside own database
+        
+        $file = new File();
+        $file->name = $user->email;
+        $file->is_folder = 1;
+        $file->makeRoot()->save();  // to use the makeRoot make sure to give the NodeTrait inside the File model
+
+        // here we pass the name we give inside the web.php not the route
+        // When user is created that time its has a below path name
+        return redirect(route('myFiles', absolute: false));
     }
 }
