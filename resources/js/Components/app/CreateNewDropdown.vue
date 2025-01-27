@@ -1,6 +1,25 @@
 <script setup lang="ts">
+// Imports
 import { Menu, MenuButton, MenuItems, MenuItem } from "@headlessui/vue";
 import { ChevronDownIcon } from "@heroicons/vue/20/solid";
+import CreateFolderModal from "./CreateFolderModal.vue";
+import { ref } from "vue";
+
+// Uses
+
+const createFolderModal = ref(false);
+
+// Props $ Emit
+
+// Computed
+
+// Methods
+const ShowCreateFolderModal = () => {
+  createFolderModal.value = true
+};
+
+// Hooks
+
 </script>
 
 <template>
@@ -24,7 +43,10 @@ import { ChevronDownIcon } from "@heroicons/vue/20/solid";
       >
         <div class="px-1 py-1">
           <MenuItem v-slot="{ active }">
-            <a class="text-gray-700 block px-4 py-2 text-sm" href=""
+            <a
+              class="text-gray-700 block px-4 py-2 text-sm"
+              href="#"
+              @click.prevent="ShowCreateFolderModal"
               >New Folder</a
             >
           </MenuItem>
@@ -44,6 +66,7 @@ import { ChevronDownIcon } from "@heroicons/vue/20/solid";
       </MenuItems>
     </transition>
   </Menu>
+  <CreateFolderModal v-model="createFolderModal"/>
 </template>
 
 <style scoped></style>

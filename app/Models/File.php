@@ -10,4 +10,10 @@ use Kalnoy\Nestedset\NodeTrait;
 class File extends Model
 {
     use NodeTrait, SoftDeletes, HasCreatorAndUpdater;
+
+    // If the current folder is owned by the current authenticated user
+    public function isOwnedBy($userId): bool
+    {
+        return $this->created_by == $userId;
+    }
 }
