@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreFolderRequest;
+use App\Http\Resources\FileResource;
 use App\Models\File;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
@@ -11,7 +12,24 @@ class FileController extends Controller
 {
     public function myFiles()
     {
-        return Inertia::render('MyFiles');
+        // starting point where everything is stored
+        $folder = $this->getRoot();
+
+        //finding all the items (files and folders) that belong to the user’s main folder
+        // sorted nicely, and only showing 10 at once.
+        $files = File::query()
+            ->where('parent_id', $folder->id)
+            ->where('created_by', Auth::id())
+            ->orderBy('is_folder', 'desc')
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);
+        // dd($files);
+
+        // Get this one is from the Resources folder to make data structured and readable
+        $files = FileResource::collection($files);
+
+        return Inertia::render('MyFiles', compact('files'));
+        
     }
 
     public function createFolder(StoreFolderRequest $request)
@@ -21,9 +39,9 @@ class FileController extends Controller
 
         // We have created parent inside the ParentIdBaseRequest
         $parent = $request->parent;
-        
+
         // If the parent is not exits then get the root
-        if(!$parent){
+        if (!$parent) {
             $parent = $this->getRoot();
         }
 
@@ -34,9 +52,9 @@ class FileController extends Controller
 
         // Append it inside the parent
         $parent->appendNode($file);
-
     }
 
+    // find the root folder for the currently authenticated user
     public function getRoot()
     {
         return File::query()
