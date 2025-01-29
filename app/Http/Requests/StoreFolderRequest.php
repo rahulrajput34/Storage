@@ -16,17 +16,20 @@ class StoreFolderRequest extends ParentIdBaseRequest
      */
     public function rules(): array
     {
+        // TODO: a good Bug I have faced for unique file 
         // We want the rules coming from the ParentIdBaseRequest and also our own rules
         return array_merge(parent::rules(),
-        [
-            'name' => [
-                'required',
-                Rule::unique(File::class, 'name')
-                    ->where('created_by', Auth::id())
-                    ->where('parent_id', $this->parent_id)
-                    ->whereNull('deleted_at')
-            ],
-        ]);         
+            [
+                'name' => [
+                    'required',
+                    'unique:files',
+                    Rule::unique(File::class, 'name')
+                        ->where('created_by', Auth::id())
+                        ->where('parent_id', $this->input('parent_id'))
+                        ->whereNull('deleted_at')
+                ]
+            ]
+        );        
     }
 
     public function messages()
