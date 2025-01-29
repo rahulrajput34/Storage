@@ -18,10 +18,12 @@ const form = useForm({
 const folderNameInput = ref(null);
 
 // Props $ Emit
+// This value is coming from its parent when he click on the New Folder and here its comes true
 const props = defineProps<{
   modelValue: boolean;
 }>();
 
+// This  value is coming from the child
 const emit = defineEmits(["update:modelValue"]);
 
 // Computed
@@ -43,6 +45,8 @@ const createFolder = () => {
   });
 };
 
+// update:modelValue this event is updating the value of the modelValue and its make it false so that if I press the cenacle its automatically close this one
+// So this child change the value of the parent
 const closeModal = () => {
   emit("update:modelValue");
   form.clearErrors();
@@ -55,7 +59,9 @@ const closeModal = () => {
 <template>
   <Modal :show="modelValue" @show="onShow" max-width="sm">
     <div class="p-6">
-      <h2 class="text-lg font-medium text-gray-900">Create new Folder</h2>
+      <h2 class="text-lg font-medium text-gray-900">
+        Create new Folder
+      </h2>
       <div class="mt-6">
         <InputLabel for="folderName" value="Folder Name" class="sr-only" />
         <TextInput
