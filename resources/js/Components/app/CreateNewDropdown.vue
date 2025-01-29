@@ -6,7 +6,6 @@ import CreateFolderModal from "./CreateFolderModal.vue";
 import { ref } from "vue";
 
 // Uses
-
 const createFolderModal = ref(false);
 
 // Props $ Emit
@@ -15,11 +14,10 @@ const createFolderModal = ref(false);
 
 // Methods
 const ShowCreateFolderModal = () => {
-  createFolderModal.value = true
+  createFolderModal.value = true;
 };
 
 // Hooks
-
 </script>
 
 <template>
@@ -66,7 +64,7 @@ const ShowCreateFolderModal = () => {
       </MenuItems>
     </transition>
   </Menu>
-  <CreateFolderModal v-model="createFolderModal"/>
+  <CreateFolderModal v-model="createFolderModal" />
 </template>
 
 <style scoped></style>
