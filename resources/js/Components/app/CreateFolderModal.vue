@@ -8,11 +8,16 @@ import { useForm } from "@inertiajs/vue3";
 import SecondaryButton from "../SecondaryButton.vue";
 import PrimaryButton from "../PrimaryButton.vue";
 import { nextTick, ref } from "vue";
+import { usePage } from "@inertiajs/vue3";
 
 // Uses
 const form = useForm({
   name: "",
+  parent_id: null,
 });
+
+// Here we can access all the value which backend passes
+const page = usePage();
 
 // Refs
 const folderNameInput = ref(null);
@@ -34,6 +39,7 @@ function onShow() {
 }
 
 const createFolder = () => {
+  form.parent_id = page.props.folder.id;
   form.post(route("folder.create"), {
     preserveScroll: true,
     onSuccess: () => {
