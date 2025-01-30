@@ -10,10 +10,26 @@ use Inertia\Inertia;
 
 class FileController extends Controller
 {
-    public function myFiles()
+    public function myFiles( string $folder = null)
     {
+        // dd($folder);
+
+        if($folder){
+            $folder = File::query()
+                ->where('created_by', Auth::id())
+                ->where('path', $folder)
+                ->firstOrFail();
+        }
+
+        // dd($folder);
+
+        if(!$folder){
+            $folder = $this->getRoot();
+        }
+
+
         // starting point where everything is stored
-        $folder = $this->getRoot();
+        // $folder = $this->getRoot();
 
         //finding all the items (files and folders) that belong to the user’s main folder
         // sorted nicely, and only showing 10 at once.
@@ -28,7 +44,11 @@ class FileController extends Controller
         // Get this one is from the Resources folder to make data structured and readable
         $files = FileResource::collection($files);
 
-        return Inertia::render('MyFiles', compact('files'));
+        $ancestors = FileResource::collection([...$folder->ancestors,  $folder]);
+
+        $folder = new FileResource($folder);
+
+        return Inertia::render('MyFiles', compact('files', 'folder', 'ancestors'));
         
     }
 
